@@ -7,10 +7,11 @@ import {
   OneToMany,
 } from 'typeorm';
 
+import { Exclude } from 'class-transformer';
+
 import OrdersProducts from '@modules/orders/infra/typeorm/entities/OrdersProducts';
 
-
-@Entity(Product)
+@Entity('products')
 class Product {
 
   @PrimaryGeneratedColumn('uuid')
@@ -19,7 +20,7 @@ class Product {
   @Column()
   name: string;
 
-  @Column()
+  @Column('decimal')
   price: number;
 
   @Column()
@@ -29,9 +30,11 @@ class Product {
   order_products: OrdersProducts[];
 
   @CreateDateColumn()
+  @Exclude()
   created_at: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updated_at: Date;
 }
 

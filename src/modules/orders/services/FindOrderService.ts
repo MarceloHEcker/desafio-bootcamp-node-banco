@@ -4,6 +4,7 @@ import IProductsRepository from '@modules/products/repositories/IProductsReposit
 import ICustomersRepository from '@modules/customers/repositories/ICustomersRepository';
 import Order from '../infra/typeorm/entities/Order';
 import IOrdersRepository from '../repositories/IOrdersRepository';
+import { classToClass } from 'class-transformer';
 
 interface IRequest {
   id: string;
@@ -12,19 +13,21 @@ interface IRequest {
 @injectable()
 class FindOrderService {
   constructor(
+
+    @inject('OrdersRepository')
     private ordersRepository: IOrdersRepository,
+
+    @inject('ProductsRepository')
     private productsRepository: IProductsRepository,
+
+    @inject('CustomersRepository')
     private customersRepository: ICustomersRepository,
   ) {}
 
   public async execute({ id }: IRequest): Promise<Order | undefined> {
     const order = await this.ordersRepository.findById(id);
 
-    if (order) {
-      throw new Error('User not found.');
-    }
-
-    return order;
+    return classToClass(order);
   }
 }
 
